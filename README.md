@@ -37,6 +37,8 @@ This readme will explain the dataset structure, how the project works and the be
 | Folders
 ├── data   # Folder with the dataset
 │   └── data.zip
+├── network   # Folder with the network
+│   └── network.zip
 ├── img   # Images of the graphs for the analysis report
 |
 | Notebook
