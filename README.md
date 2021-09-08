@@ -2,6 +2,8 @@
 
 The objective of the project is to perform the classification of companies bankrupt using Deep Learning. The dataset is taken from [kaggle](https://www.kaggle.com/fedesoriano/company-bankruptcy-prediction) and it contains the data of some companies with a column that indicates if the company is bankrupt or not.
 
+This readme will explain the dataset structure, how the project works and the best network achieved so far.
+
 # Index
 
 - [Project structure](#project-structure)
@@ -15,8 +17,18 @@ The objective of the project is to perform the classification of companies bankr
     + [Check Values](#check-values)
   * [Data Normalization](#data-normalization)
   * [Balance Dataset](#balance-dataset)
+  * [Split data into training, validation and test set](#split-data-into-training--validation-and-test-set)
   * [Network creation](#network-creation)
-  * [Network perfomance analysis](#network-perfomance-analysis)
+    + [Options](#options)
+    + [Network Creation and Training](#network-creation-and-training)
+    + [Network Evaluate](#network-evaluate)
+    + [Save Model](#save-model)
+- [Best model analysis](#best-model-analysis)
+  * [Network structure](#network-structure)
+  * [Model Loss](#model-loss)
+  * [Model Accuracy](#model-accuracy)
+  * [Test set performance](#test-set-performance)
+    + [Confusion Matrix](#confusion-matrix)
 
 # Project structure
 ```
@@ -28,9 +40,7 @@ The objective of the project is to perform the classification of companies bankr
 ├── img   # Images of the graphs for the analysis report
 |
 | Notebook
-├── main.tf
-├── output.tf
-└── variables.tf
+└── Company_Bankruptcy_Prediction.ipynb
 ```
 
 # Dataset structure
@@ -194,7 +204,96 @@ The new shape is **(13198,96)**
 
 Now the dataset can be used with the networks.
 
+## Split data into training, validation and test set
+
+Split the data in:
+* ```x_train```: The training set data
+* ```y_train```: The training set label
+* ```x_valid```: The validation set data
+* ```y_valid```: The validation set label
+* ```x_test```: The validation set data
+* ```y_test```: The validation set label
+
+The dimension will be something like
+
+| Set | Percentage | Rows |
+|:---:|:----------:|:----:|
+|Training| 70 % | 9502 |
+| Validation | 20 % | 2376 |
+| Test | 10 % | 1320 |
 
 ## Network creation
+In the code there is a section called **Create New Model** and it is helpful to create, train and evaluate a model.
 
-## Network perfomance analysis
+### Options
+In the first part of the section there are some boolean variables that tune what the code will do:
+
+* ```train_model``` -> True: the network will be trained / False: network wont' be trained
+* ```model_loss``` -> True: plot the model loss / False: don't plot the model loss
+* ```model_accuracy``` -> True: plot the model accuracy / False: don't plot the model accuracy
+* ```evaluate_model``` -> True: evaluate the model / False: don't evaluate the model
+* ```conf_matr``` -> True: plot the confusion matrix / False: don't plot the confusion matrix
+* ```plot_model``` -> True: plot the structure of the network / False: don't plot the structure of the network
+* ```save_model``` -> True: save the model / False: don't save the model
+
+### Network Creation and Training
+After the variables tuning there is the network creation and training. 
+
+### Network Evaluate
+In this section there is the network evaluation. The code will plot useful data to understand how well the model is made and how it performs on the test set.
+
+The plots will be:
+* The model loss graph
+* The model accuracy graph
+* The performance of the test set
+* The confusion matrix
+
+### Save Model
+At the end there is the possibility to save the model
+
+# Best model analysis
+In this section we will analyze the best model that we achieved.
+
+## Network structure
+
+The network used has this structure:
+
+![Network](img/network.png)
+
+For each Dense layer except the last one there is **relu** as activation function. In the last Dense layer there is the **sigmoid** activation function.
+
+In all Dense layer in the middle of the network there also the **l2 kernel regularizer** setted with (0.001).
+
+The optimizer is **RMSprop** with the learning rate settet at 0.001.
+
+The **loss function** is the binary crossentropy.
+
+## Model Loss
+![Model Loss](img/model_loss.png)
+
+As we can see there are some spikes in the Validation but overall it follows the Training loss. So there is no underfitting and no overfitting.
+
+## Model Accuracy
+
+![Model Accuracy](img/model_accuracy.png)
+
+As we can see there are some spikes in the accuracy but overall the Validation accuracy follows the Training accuracy. 
+
+## Test set performance
+
+In this section we will see how well the network perform on the training set.
+
+| Accuracy | Loss |
+|:--------:|:----:|
+| 97.50 % | 0.1229|
+
+| Class | Precision | Recall | f1-score | support |
+|:-----:|:---------:|:------:|:--------:|:-------:|
+| 0 | 1.00 | 0.95 | 0.98 | 688 |
+| 1 | 0.95 | 1.00 | 0.97 | 632 |
+
+### Confusion Matrix
+
+![Conf_Matr](img/conf_matr.png)
+
+As we can se only 33 values were misclassified.
