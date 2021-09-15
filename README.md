@@ -148,7 +148,7 @@ The columns of the dataset are the following:
 * X94 - Net Income Flag: 1 if Net Income is Negative for the last two years, 0 otherwise
 * X95 - Equity to Liability
 
-The first row indicates with a 0 no bankrupt and with a 1 the bankrupt.
+The first column indicates with a 0 no bankrupt and with a 1 the bankrupt.
 
 # How the project works
 
@@ -251,7 +251,16 @@ The plots will be:
 * The confusion matrix
 
 ### Save Model
-At the end there is the possibility to save the model
+At the end there is the possibility to save the model into a zip file. The only parameters to configure are the name of the folder *file_name* and the name of the folder in the zip command.
+
+## Load Model
+
+There is also a section to load a model. To do this it's important to follow these steps:
+
+1. Load into colab the ```model.zip``` file
+2. Uncomment the load data section
+3. Insert the name of the folder into the *file_name* variable
+4. Run the load data section
 
 # Best model analysis
 In this section we will analyze the best model that we achieved.
@@ -266,9 +275,24 @@ For each Dense layer except the last one there is **relu** as activation functio
 
 In all Dense layer in the middle of the network there also the **l2 kernel regularizer** setted with (0.001).
 
-The optimizer is **RMSprop** with the learning rate settet at 0.001.
+The optimizer is **RMSprop** with the learning rate set at 0.001.
 
 The **loss function** is the binary crossentropy.
+
+We trained the network for 200 epochs.
+
+```python
+model = keras.models.Sequential()
+model.add(keras.layers.Dense(128, activation='relu', input_shape=(95,)))
+model.add(keras.layers.Dense(64,kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(32,kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(16,kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+model.add(keras.layers.Dense(1, activation='sigmoid'))
+optimizer = keras.optimizers.RMSprop(learning_rate=0.001)
+model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+```
 
 ## Model Loss
 ![Model Loss](img/model_loss.png)
