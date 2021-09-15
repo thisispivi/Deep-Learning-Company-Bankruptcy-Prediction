@@ -155,7 +155,7 @@ The first column indicates with a 0 no bankrupt and with a 1 the bankrupt.
 This section will show how the project works.
 
 ## Dataset download and import
-In the first part of the code there will be the download of the dataset from github or from kaggle. In the second case it's important to insert in the corret folder the api token. In this [link](https://www.kaggle.com/docs/api) there's a guide on how to create a token.
+In the first part of the code there will be the download of the dataset from github or from kaggle. In the second case it's important to insert in the correct folder the api token. In this [link](https://www.kaggle.com/docs/api) there's a guide on how to create a token.
 
 Next using pandas the dataset will be inserted in a pandas dataframe.
 
@@ -186,14 +186,14 @@ So the dataset is strongly unbalanced, the bankrupt class is only 3.27%. This me
 It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. Unfortunately the dataset isn't all normalized.
 
 ## Data Normalization
-In this section there will be the nomalization of the values. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
+In this section there will be the normalization of the values. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
 
 ## Balance Dataset
 The dataset has been balanced using [**SMOTE**](https://towardsdatascience.com/applying-smote-for-class-imbalance-with-just-a-few-lines-of-code-python-cdf603e58688) (Synthetic Minority Oversampling Technique).
 
 The dataset will be filled with new data and it will be balanced.
 
-The new shape is **(13198,96)**
+The new shape is **(13198,96)**.
 
 | Class | Number | Percentage |
 |:-----:|:------:|:----------:|
@@ -216,7 +216,7 @@ Split the data in:
 * ```x_test```: The validation set data
 * ```y_test```: The validation set label
 
-The dimension will be something like
+The size will be something like:
 
 | Set | Percentage | Rows |
 |:---:|:----------:|:----:|
@@ -230,7 +230,7 @@ In the code there is a section called **Create New Model** and it is helpful to 
 ### Options
 In the first part of the section there are some boolean variables that tune what the code will do:
 
-* ```train_model``` -> True: the network will be trained / False: network wont' be trained
+* ```train_model``` -> True: the network will be trained / False: network won't be trained
 * ```model_loss``` -> True: plot the model loss / False: don't plot the model loss
 * ```model_accuracy``` -> True: plot the model accuracy / False: don't plot the model accuracy
 * ```evaluate_model``` -> True: evaluate the model / False: don't evaluate the model
@@ -273,7 +273,7 @@ The network used has this structure:
 
 For each Dense layer except the last one there is **relu** as activation function. In the last Dense layer there is the **sigmoid** activation function.
 
-In all Dense layer in the middle of the network there also the **l2 kernel regularizer** setted with (0.001).
+In all Dense layers in the middle of the network there is also the **l2 kernel regularizer** setted with (0.001).
 
 The optimizer is **RMSprop** with the learning rate set at 0.001.
 
@@ -307,7 +307,7 @@ As we can see there are some spikes in the accuracy but overall the Validation a
 
 ## Test set performance
 
-In this section we will see how well the network perform on the training set.
+In this section we will see how well the network performs on the test set.
 
 | Accuracy | Loss |
 |:--------:|:----:|
@@ -318,8 +318,10 @@ In this section we will see how well the network perform on the training set.
 | 0 | 1.00 | 0.95 | 0.98 | 688 |
 | 1 | 0.95 | 1.00 | 0.97 | 632 |
 
+As we can see the results are really good. We have a high accuracy on the test set.
+
 ### Confusion Matrix
 
 ![Conf_Matr](img/conf_matr.png)
 
-As we can se only 33 values were misclassified.
+As we can see only 33 values were misclassified.
