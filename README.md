@@ -166,7 +166,7 @@ In the next part there will be an analysis of the dataset.
 The first thing done is to check the shape of the dataframe: **(6819,96)**
 
 ### Null Values
-The second thing is to check if there are null values. Fortunately there aren't null values.
+The second thing is to check if there are null values. This dataset has no null values.
 
 ### Balance
 Next it's important to check the balance of the dataset, because if there is a class that has more rows than the other the classification will have a good accuracy but it won't perform well on the minor class.
@@ -183,7 +183,7 @@ Next it's important to check the balance of the dataset, because if there is a c
 So the dataset is strongly unbalanced, the bankrupt class is only 3.27%. This means that there will be a step in which using SMOTE the dataset will be balanced.
 
 ### Check Values
-It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. Unfortunately the dataset isn't all normalized.
+It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. The dataset isn't all normalized.
 
 ## Data Normalization
 In this section there will be the normalization of the values. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
