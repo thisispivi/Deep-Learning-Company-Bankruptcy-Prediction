@@ -186,7 +186,7 @@ So the dataset is strongly unbalanced, the bankrupt class is only 3.27%. This me
 It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. The dataset isn't all normalized.
 
 ## Data Normalization
-In this section there will be the normalization of the values. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
+The next step is to normalize all the data. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
 
 ## Balance Dataset
 The dataset has been balanced using [**SMOTE**](https://towardsdatascience.com/applying-smote-for-class-imbalance-with-just-a-few-lines-of-code-python-cdf603e58688) (Synthetic Minority Oversampling Technique).
@@ -220,8 +220,8 @@ The size will be something like:
 
 | Set | Percentage | Rows |
 |:---:|:----------:|:----:|
-|Training| 70 % | 9502 |
-| Validation | 20 % | 2376 |
+|Training| 72 % | 9502 |
+| Validation | 18 % | 2376 |
 | Test | 10 % | 1320 |
 
 ## Network creation
