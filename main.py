@@ -105,7 +105,6 @@ if __name__ == "__main__":
     # Confusion Matrix: Compute the label prediction using the test set and plot the confusion matrix.
     if conf_matr:
         plot_conf_matr(model, x_test, y_test, 'Confusion Matrix / Balanced Dataset')
-
     
     # Test performance original value
     x_original_train, x_original_test, y_original_train, y_original_test = train_test_split(data, labels, train_size=0.9)

@@ -162,7 +162,7 @@ The first column indicates with a 0 no bankrupt and with a 1 the bankrupt.
 This section will show how the project works.
 
 ## Dataset download and import
-In the first part of the code there is the import of the dataset. This is a csv file in the data folder.
+In the first part of the code there is the import of the dataset into a pandas dataframe. This is a csv file in the data folder. This is a csv file in the data folder.
 
 ## Dataset analysis
 In the next part there will be an analysis of the dataset.
