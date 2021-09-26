@@ -19,16 +19,18 @@ This readme will explain the dataset structure, how the project works and the be
   * [Balance Dataset](#balance-dataset)
   * [Split data into training, validation and test set](#split-data-into-training--validation-and-test-set)
   * [Network creation](#network-creation)
-    + [Options](#options)
-    + [Network Creation and Training](#network-creation-and-training)
     + [Network Evaluate](#network-evaluate)
     + [Save Model](#save-model)
 - [Best model analysis](#best-model-analysis)
   * [Network structure](#network-structure)
   * [Model Loss](#model-loss)
   * [Model Accuracy](#model-accuracy)
-  * [Test set performance](#test-set-performance)
+  * [Test set performance with SMOTE](#test-set-performance-with-smote)
     + [Confusion Matrix](#confusion-matrix)
+  * [Test set performance without SMOTE](#test-set-performance-without-smote)
+    + [Confusion Matrix](#confusion-matrix-1)
+- [How to run the project](#how-to-run-the-project)
+  * [Load the model](#load-the-model)
 
 # Project structure
 ```
@@ -36,13 +38,18 @@ This readme will explain the dataset structure, how the project works and the be
 |
 | Folders
 ├── data   # Folder with the dataset
-│   └── data.zip
+│   └── data.csv
 ├── network   # Folder with the network
-│   └── network.zip
+│   └── network.zip
+├── notebook  # Folder with the notebook
+│   └── Company_Bankruptcy_Prediction.ipynb
 ├── img   # Images of the graphs for the analysis report
 |
-| Notebook
-└── Company_Bankruptcy_Prediction.ipynb
+| Script
+├── analyze_dataset.py   # Function to analyze dataset
+├── deep_learing.py   # Function to perform deep learning
+├── main.py
+└── variables.py   # File with the variables to configure the code
 ```
 
 # Dataset structure
@@ -155,9 +162,7 @@ The first column indicates with a 0 no bankrupt and with a 1 the bankrupt.
 This section will show how the project works.
 
 ## Dataset download and import
-In the first part of the code there will be the download of the dataset from github or from kaggle. In the second case it's important to insert in the correct folder the api token. In this [link](https://www.kaggle.com/docs/api) there's a guide on how to create a token.
-
-Next using pandas the dataset will be inserted in a pandas dataframe.
+In the first part of the code there is the import of the dataset. This is a csv file in the data folder.
 
 ## Dataset analysis
 In the next part there will be an analysis of the dataset.
@@ -225,45 +230,26 @@ The size will be something like:
 | Test | 10 % | 1320 |
 
 ## Network creation
-In the code there is a section called **Create New Model** and it is helpful to create, train and evaluate a model.
-
-### Options
-In the first part of the section there are some boolean variables that tune what the code will do:
-
-* ```train_model``` -> True: the network will be trained / False: network won't be trained
-* ```model_loss``` -> True: plot the model loss / False: don't plot the model loss
-* ```model_accuracy``` -> True: plot the model accuracy / False: don't plot the model accuracy
-* ```evaluate_model``` -> True: evaluate the model / False: don't evaluate the model
-* ```conf_matr``` -> True: plot the confusion matrix / False: don't plot the confusion matrix
-* ```plot_model``` -> True: plot the structure of the network / False: don't plot the structure of the network
-* ```save_model``` -> True: save the model / False: don't save the model
-
-### Network Creation and Training
-After the variables tuning there is the network creation and training. 
+Here there are two options:
+1. Create a new model
+2. Load a model
+With the first option we need to create a model and train it. While with the other we can just import the model and test it.
 
 ### Network Evaluate
 In this section there is the network evaluation. The code will plot useful data to understand how well the model is made and how it performs on the test set.
-
 The plots will be:
 * The model loss graph
 * The model accuracy graph
-* The performance of the test set
-* The confusion matrix
+* The performance of the test set using the balanced dataset
+* The confusion matrix using the balanced dataset
+* The performance of the test set using the original dataset
+* The confusion matrix using the original dataset
 
 ### Save Model
-At the end there is the possibility to save the model into a zip file. The only parameters to configure are the name of the folder *file_name* and the name of the folder in the zip command.
-
-## Load Model
-
-There is also a section to load a model. To do this it's important to follow these steps:
-
-1. Load into colab the ```model.zip``` file
-2. Uncomment the load data section
-3. Insert the name of the folder into the *file_name* variable
-4. Run the load data section
+In the code there is also the possibility to save the created model. In the ```variables.py``` it is possible to choose the name. The model will be in a folder in the network folder.
 
 # Best model analysis
-In this section we will analyze the best model that we achieved.
+We tested the code many times, but we won’t insert all the networks obtained. We will show just the best network obtained.
 
 ## Network structure
 
@@ -305,7 +291,7 @@ As we can see there are some spikes in the Validation but overall it follows the
 
 As we can see there are some spikes in the accuracy but overall the Validation accuracy follows the Training accuracy. 
 
-## Test set performance
+## Test set performance with SMOTE
 
 In this section we will see how well the network performs on the test set.
 
@@ -325,3 +311,71 @@ As we can see the results are really good. We have a high accuracy on the test s
 ![Conf_Matr](img/conf_matr.png)
 
 As we can see only 33 values were misclassified.
+
+## Test set performance without SMOTE
+
+To see if the model is good we also tested it using the original dataset (the not balanced one).
+
+| Accuracy | Loss |
+|:--------:|:----:|
+| 98.0 %  | 0.0663|
+
+| Class | Precision | Recall | f1-score | support |
+|:-----:|:---------:|:------:|:--------:|:-------:|
+| 0 | 1.00 | 0.98 | 0.99 | 661 |
+| 1 | 0.60 | 1.00 | 0.75 | 21 |
+
+As we can see, the results for the class with few elements have the worst performance unlike the balanced one.
+
+### Confusion Matrix
+
+![Conf_Matr](img/conf_matr_original.png)
+
+As we can see only 14 values were misclassified.
+
+
+# How to run the project
+Here we will explain how to run the code. It’s important to have python installed
+
+1. Clone the repository
+```bash
+git clone https://github.com/thisispivi/Deep-Learning-Company-Bankruptcy-Prediction.git
+```
+
+2. Run these lines on a terminal
+```bash
+pip install sklearn
+pip install imblearn
+pip install pandas
+pip install matplotlib
+pip install tensorflow
+pip install seaborn
+```
+
+3. Open the ```variables.py``` file and configure the variables:
+* **train_model** -> True: the network will be trained / False: network won't' be trained
+* **model_loss** -> True: plot the model loss / False: don't plot the model loss
+* **model_accuracy** -> True: plot the model accuracy / False: don't plot the model accuracy
+* **evaluate_model** -> True: evaluate the model / False: don't evaluate the model
+* **conf_matr** -> True: plot the confusion matrix / False: don't plot the confusion matrix
+vplot_model** -> True: plot the structure of the network / False: don't plot the structure of the network
+* **save_model** -> True: save the model / False: don't save the model
+* **load_model** -> True: load a model in the network folder / False: don't load the model
+
+4. Run the code:
+```bash
+python main.py
+```
+
+## Load the model
+To load our trained model:
+
+1. Go the network folder and unzip the model.zip file
+
+2. Open the ```variables.py``` file and change the ```load_model``` variable to **True**
+
+3. Run the code:
+```bash
+python main.py
+```
+
