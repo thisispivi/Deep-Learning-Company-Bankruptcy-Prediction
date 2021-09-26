@@ -25,6 +25,7 @@ if __name__ == "__main__":
     print('Labels shape:', labels.shape)
 
     # Null values: Check if there are null values
+    print('\nCheck Dataset Null Values')
     num_null = df.isnull().sum(axis=0).sum()
     if num_null == 0:
         print("There aren't null values in the dataset\n")
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         balance(pd.Series(labels_new), True)
 
     # Split data into training, validation and test set
-    print("Split data\n")
+    print("\nSplit data")
     x_train, x_test, y_train, y_test = train_test_split(data_new, labels_new, train_size=0.9)
     x_train, x_valid, y_train, y_valid = train_test_split(x_train, y_train, train_size=0.8)
 
