@@ -41,8 +41,6 @@ This readme will explain the dataset structure, how the project works and the be
 │   └── data.csv
 ├── network   # Folder with the network
 │   └── network.zip
-├── notebook  # Folder with the notebook
-│   └── Company_Bankruptcy_Prediction.ipynb
 ├── img   # Images of the graphs for the analysis report
 |
 | Script
@@ -162,7 +160,7 @@ The first column indicates with a 0 no bankrupt and with a 1 the bankrupt.
 This section will show how the project works.
 
 ## Dataset download and import
-In the first part of the code there is the import of the dataset into a pandas dataframe. This is a csv file in the data folder. This is a csv file in the data folder.
+In the first part of the code there is the import of the dataset into a pandas dataframe. This is a csv file in the data folder. This is a csv file in the **data** folder.
 
 ## Dataset analysis
 In the next part there will be an analysis of the dataset.
@@ -188,32 +186,50 @@ Next it's important to check the balance of the dataset, because if there is a c
 So the dataset is strongly unbalanced, the bankrupt class is only 3.27%. This means that there will be a step in which using SMOTE the dataset will be balanced.
 
 ### Check Values
-It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. The dataset isn't all normalized.
+It is important also to check if all the data are normalized. So if the code finds some values that are bigger than 1 and lower than 0, a normalization step will be performed. 
+
+The dataset isn't all normalized.
+
+### Outliers
+We also checked if there are many outliers using a box plot chart.
+
+![Outliers](img/boxplot.png)
+
+As we can see many of the columns have outliers. So in a future step there will be the possibility to fix them.
+
+## Capping and Flooring
+
+The code gives the possibility to fix the outlier problem. If we want to fix them the code will perform the capping and flooring. 
+
+![Capping-Flooring](img/outliers.png)
+
+We computed the 25th percentile and the 75th percentile, obtaining Q1 and Q3. Next we computed the [Interquartile Range (IQR)](https://en.wikipedia.org/wiki/Interquartile_range) and then we computed the “Minimum” and the “Maximum”. 
+Basically when we find an outlier that is lower than the “Minimum” we change its value with the “Minimum”. The same thing applied to the “Maximum”.
+
 
 ## Data Normalization
 The next step is to normalize all the data. This process will use the ```StandardScaler()```. This scaler uses the mean and the standard deviation to set all values to between 0 and 1.
 
+## Split into training and test set
+The next step is to split the dataset into training and test sets. We decided that the training set will be 90% of the dataset.
+|Set|Percentage|Rows|
+|:-:|:-:|:-:|
+|Training|90 %|6137|
+|Test|10%|682|
+
 ## Balance Dataset
-The dataset has been balanced using [**SMOTE**](https://towardsdatascience.com/applying-smote-for-class-imbalance-with-just-a-few-lines-of-code-python-cdf603e58688) (Synthetic Minority Oversampling Technique).
+Next we balanced the training set using [**SMOTE**](https://towardsdatascience.com/applying-smote-for-class-imbalance-with-just-a-few-lines-of-code-python-cdf603e58688) (Synthetic Minority Oversampling Technique).
 
 The dataset will be filled with new data and it will be balanced.
 
-The new shape is **(13198,96)**.
+The shape of the training set depends on the number of the class 0, so it will be different each time. 
 
-| Class | Number | Percentage |
-|:-----:|:------:|:----------:|
-|   0   |  6599  |    50.0 %  |
-|   1   |  6599  |    50.0 %  |
-
-![class_balance_bar_post](img/class_balance_bar_post.png)
-
+After the balance the training set will look like this:  
 ![class_balance_pie_post](img/class_balance_pie_post.png)
-
-Now the dataset can be used with the networks.
 
 ## Split data into training, validation and test set
 
-Split the data in:
+After we split the training set into **train** and **validation** sets. So we will have these dataframes:
 * ```x_train```: The training set data
 * ```y_train```: The training set label
 * ```x_valid```: The validation set data
@@ -223,11 +239,9 @@ Split the data in:
 
 The size will be something like:
 
-| Set | Percentage | Rows |
-|:---:|:----------:|:----:|
-|Training| 72 % | 9502 |
-| Validation | 18 % | 2376 |
-| Test | 10 % | 1320 |
+|   | Training | Validation | Test |
+|:-:|:---:|:----------:|:----:|
+|Percent of the dataset|72%|18%|10%|
 
 ## Network creation
 Here there are two options:
@@ -236,8 +250,9 @@ Here there are two options:
 With the first option we need to create a model and train it. While with the other we can just import the model and test it.
 
 ### Network Evaluate
-In this section there is the network evaluation. The code will plot useful data to understand how well the model is made and how it performs on the test set.
-The plots will be:
+Next there is the network evaluation. We evaluate the network with the original test set, so we can see how it performs on non balanced data, like the real world. 
+
+The code will plot useful data to understand how well the model is made:
 * The model loss graph
 * The model accuracy graph
 * The performance of the test set using the balanced dataset
@@ -249,7 +264,9 @@ The plots will be:
 In the code there is also the possibility to save the created model. In the ```variables.py``` it is possible to choose the name. The model will be in a folder in the network folder.
 
 # Best model analysis
-We tested the code many times, but we won’t insert all the networks obtained. We will show just the best network obtained.
+We tested the code many times, but we won’t insert all the networks obtained. We will show just the best network obtained. 
+
+The best method found doesn't use the flooring and capping, so we have outliers in the dataset.
 
 ## Network structure
 
@@ -291,18 +308,21 @@ As we can see there are some spikes in the Validation but overall it follows the
 
 As we can see there are some spikes in the accuracy but overall the Validation accuracy follows the Training accuracy. 
 
-## Test set performance with SMOTE
+## Test set performance
 
 In this section we will see how well the network performs on the test set.
 
 | Accuracy | Loss |
 |:--------:|:----:|
-| 97.50 % | 0.1229|
+| 95.89 % | 0.3164|
 
 | Class | Precision | Recall | f1-score | support |
 |:-----:|:---------:|:------:|:--------:|:-------:|
-| 0 | 1.00 | 0.95 | 0.98 | 688 |
-| 1 | 0.95 | 1.00 | 0.97 | 632 |
+| 0 | 0.98 | 0.97 | 0.98 | 660 |
+| 1 | 0.40 | 0.55 | 0.46 | 22 |
+||
+|Macro avg|0.69|0.76|0.72|682|
+|Weighted avg|0.97|0.96|0.96|682|
 
 As we can see the results are really good. We have a high accuracy on the test set.
 
@@ -310,29 +330,8 @@ As we can see the results are really good. We have a high accuracy on the test s
 
 ![Conf_Matr](img/conf_matr.png)
 
-As we can see only 33 values were misclassified.
-
-## Test set performance without SMOTE
-
-To see if the model is good we also tested it using the original dataset (the not balanced one).
-
-| Accuracy | Loss |
-|:--------:|:----:|
-| 98.0 %  | 0.0663|
-
-| Class | Precision | Recall | f1-score | support |
-|:-----:|:---------:|:------:|:--------:|:-------:|
-| 0 | 1.00 | 0.98 | 0.99 | 661 |
-| 1 | 0.60 | 1.00 | 0.75 | 21 |
-
-As we can see, the results for the class with few elements have the worst performance unlike the balanced one.
-
-### Confusion Matrix
-
-![Conf_Matr](img/conf_matr_original.png)
-
-As we can see only 14 values were misclassified.
-
+The confusion matrix confirms what was said in the previous paragraph. Almost the entirety of the **No Bankrupt** class was classified correctly, while with the **Bankrupt** there were a lot of errors.
+So, the model doesn’t perform well in the lower class.
 
 # How to run the project
 Here we will explain how to run the code. It’s important to have python installed
@@ -361,6 +360,8 @@ pip install seaborn
 vplot_model** -> True: plot the structure of the network / False: don't plot the structure of the network
 * **save_model** -> True: save the model / False: don't save the model
 * **load_model** -> True: load a model in the network folder / False: don't load the model
+* **save_figure** -> True: save the image of the plots / False: show the plots
+* **substitute** -> True: substitute outliers / False: don't fix outliers 
 
 4. Run the code:
 ```bash

@@ -4,8 +4,8 @@
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 
-from analyze_dataset import *
 from variables import *
+from analyze_dataset import *
 from deep_learning import *
 
 if __name__ == "__main__":
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     labels = df['Bankrupt?']
     data = df.drop(['Bankrupt?'], axis=1)
 
-    # Analyze Dataset: In this section we will analyze the dataset shape, balance and if it has null values in its rows
+    ### Analyze Dataset: In this section we will analyze the dataset shape, balance and if it has null values in its rows ###
 
     # Shape: Check the shape of the dataset
     print('\nCheck Dataset Shape')
@@ -35,9 +35,31 @@ if __name__ == "__main__":
     # Balance: Check if the dataset is balanced
     print("Check if the Dataset is balanced")
     balanced = True
-    zero_percentage = balance(df['Bankrupt?'], False)
+    if not save_figure:
+        zero_percentage = balance(df['Bankrupt?'], False)
+    else:
+        zero_percentage = balance(df['Bankrupt?'], False, img_folder /
+                                  "class_balance_bar.png", img_folder / "class_balance_pie.png")
     if zero_percentage != 50.0:
+        print("Data is not Balanced")
         balanced = False
+    else:
+        print("Data is Balanced")
+
+    # Outliers
+    if not save_figure:
+        plot_outliers(df, False)
+    else:
+        plot_outliers(df, False, img_folder / "outliers.png")
+
+    # Fix outliers
+    if substitute:
+        print("\nFix Outliers")
+        df = capping_flooring(df)
+        if not save_figure:
+            plot_outliers(df, False)
+        else:
+            plot_outliers(df, False, img_folder / "outliers.png")
 
     # Normalize values
     print("\nNormalize Dataset\n")
@@ -47,24 +69,30 @@ if __name__ == "__main__":
     labels = df['Bankrupt?']
     data = df.drop(['Bankrupt?'], axis=1)
 
-    # Balance Dataset using SMOTE
-    data_new = data
-    labels_new = labels
+    # Split training and test set
+    print("Split training and test set\n")
+    x_train, x_test, y_train, y_test = train_test_split(
+        data, labels, train_size=0.9)
 
+    # Balance Dataset using SMOTE
     if not balanced:
         print("Balance Dataset using SMOTE")
         sm = SMOTE()
-        data_new, labels_new = sm.fit_resample(data, labels)
+        x_train, y_train = sm.fit_resample(x_train, y_train)
 
-        print('Data shape:', data_new.shape)
-        print('Labels shape:', labels_new.shape)
+        print('Data shape:', x_train.shape)
+        print('Labels shape:', y_train.shape)
 
-        balance(pd.Series(labels_new), True)
+        if not save_figure:
+            balance(pd.DataFrame(y_train), True)
+        else:
+            balance(pd.DataFrame(y_train), True, img_folder /
+                    "class_balance_bar_post.png", img_folder / "class_balance_pie_post.png")
 
-    # Split data into training, validation and test set
-    print("\nSplit data")
-    x_train, x_test, y_train, y_test = train_test_split(data_new, labels_new, train_size=0.9)
-    x_train, x_valid, y_train, y_valid = train_test_split(x_train, y_train, train_size=0.8)
+    # Split data into training and validation set
+    print("\nSplit training and validation data")
+    x_train, x_valid, y_train, y_valid = train_test_split(
+        x_train, y_train, train_size=0.8)
 
     # Print all the sizes
     print('Train data shape:', x_train.shape)
@@ -73,7 +101,7 @@ if __name__ == "__main__":
     print('Validation labels shape:', y_valid.shape)
     print('Test data shape:', x_test.shape)
     print('Test labels shape:', y_test.shape)
-    input("PRESS ENTER TO CONTINUE")
+    #input("PRESS ENTER TO CONTINUE")
 
     if not load_model:
         print("\nCreate new model")
@@ -83,15 +111,22 @@ if __name__ == "__main__":
         print("\nTrain the network")
         history = None
         if train_model:
-            history = model.fit(x_train, y_train, epochs=200, validation_data=(x_valid, y_valid))
+            history = model.fit(x_train, y_train, epochs=200,
+                                validation_data=(x_valid, y_valid))
 
         # Loss graph of the model
         if model_loss:
-            plot_loss(history)
+            if not save_figure:
+                plot_loss(history)
+            else:
+                plot_loss(history, img_folder / "model_loss.png")
 
         # Accuracy graph of the model
         if model_accuracy:
-            plot_accuracy(history)
+            if not save_figure:
+                plot_accuracy(history)
+            else:
+                plot_accuracy(history, img_folder / "model_accuracy.png")
     else:
         # Load model
         print("\nLoad model")
@@ -99,31 +134,19 @@ if __name__ == "__main__":
 
     # Evaluate the model: Check how well the dataset perform on the test set
     if evaluate_model:
-        print("\nModel Performance / Balanced Dataset")
+        print("\nModel Performance / Original Dataset")
         model.evaluate(x_test, y_test)
 
     # Confusion Matrix: Compute the label prediction using the test set and plot the confusion matrix.
     if conf_matr:
-        plot_conf_matr(model, x_test, y_test, 'Confusion Matrix / Balanced Dataset')
-    
-    # Test performance original value
-    x_original_train, x_original_test, y_original_train, y_original_test = train_test_split(data, labels, train_size=0.9)
-
-    # Evaluate the model: Check how well the dataset perform on the test set
-    if evaluate_model:
-        print("\nModel Performance / Original Dataset")
-        model.evaluate(x_original_test, y_original_test)
-
-    # Confusion Matrix: Compute the label prediction using the test set and plot the confusion matrix.
-    if conf_matr:
-        plot_conf_matr(model, x_original_test, y_original_test, 'Confusion Matrix / Original Dataset')
+        if not save_figure:
+            plot_conf_matr(model, x_test, y_test,
+                           'Confusion Matrix / Original Dataset')
+        else:
+            plot_conf_matr(model, x_test, y_test,
+                           'Confusion Matrix / Original Dataset', img_folder / "conf_matr.png")
 
     # Save the model
     if save_model:
         print("\nSave Model")
         model.save(file_name)
-
-    # Plot model
-    if plot_model:
-        dot_img_file = "network.png"
-        keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)

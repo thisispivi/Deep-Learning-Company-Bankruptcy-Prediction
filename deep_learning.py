@@ -27,9 +27,10 @@ def get_model():
     return new_model
 
 
-def plot_loss(history):
+def plot_loss(history, save_path=None):
     """
     Plot the loss graph of the model
+    :param save_path: pathlib path. If the parameter is passed the plot image will be saved in the figures folder. Else the image will be showed
     """
     plt.subplots(figsize=(12, 8))
     plt.plot(history.history['loss'])
@@ -39,12 +40,16 @@ def plot_loss(history):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper right')
     plt.draw()
-    plt.show()
+    if save_path == None:
+        plt.show()
+    else:
+        plt.savefig(save_path)
 
 
-def plot_accuracy(history):
+def plot_accuracy(history, save_path=None):
     """
     Plot the accuracy graph of the model
+    :param save_path: pathlib path. If the parameter is passed the plot image will be saved in the figures folder. Else the image will be showed
     """
     plt.subplots(figsize=(12, 8))
     plt.plot(history.history['accuracy'])
@@ -54,16 +59,20 @@ def plot_accuracy(history):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='lower right')
     plt.draw()
-    plt.show()
+    if save_path == None:
+        plt.show()
+    else:
+        plt.savefig(save_path)
 
 
-def plot_conf_matr(model, x_test, y_test, title):
+def plot_conf_matr(model, x_test, y_test, title, save_path=None):
     """
     Plot the confusion matrix of the model
     :param model: the keras model
     :param x_test: the data of the test set
     :param y_test: test set labels
     :param title: the title of the graph
+    :param save_path: pathlib path. If the parameter is passed the plot image will be saved in the figures folder. Else the image will be showed
     """
     predictions = model.predict(x_test)
     classes = predictions > 0.5
@@ -81,4 +90,7 @@ def plot_conf_matr(model, x_test, y_test, title):
     ax.yaxis.set_ticklabels(['No Bankrupt', 'Bankrupt'])
     print(classification_report(y_test, classes))
     plt.draw()
-    plt.show()
+    if save_path == None:
+        plt.show()
+    else:
+        plt.savefig(save_path)

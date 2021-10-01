@@ -11,7 +11,8 @@ conf_matr -> True: plot the confusion matrix / False: don't plot the confusion m
 plot_model -> True: plot the structure of the network / False: don't plot the structure of the network
 save_model -> True: save the model / False: don't save the model
 load_model -> True: load a model in the network folder / False: don't load the model
-        
+save_figure -> True: save the image of the plots / False: show the plots
+substitute  -> True: substitute outliers / False: don't fix outliers    
 """
 
 train_model = True
@@ -22,9 +23,13 @@ conf_matr = True
 plot_model = True
 save_model = True
 load_model = False
+save_figure = True
+substitute = False
 
 data_folder = Path(__file__).parent.resolve() / Path("data")
 dataset_file = data_folder / 'data.csv'
 
 save_folder = Path(__file__).parent.resolve() / Path("network")
-file_name = save_folder / 'acc_97'
+file_name = save_folder / 'new'
+
+img_folder = Path(__file__).parent.resolve() / Path("figures")
