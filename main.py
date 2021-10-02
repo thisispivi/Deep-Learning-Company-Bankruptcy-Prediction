@@ -83,10 +83,14 @@ if __name__ == "__main__":
         print('Data shape:', x_train.shape)
         print('Labels shape:', y_train.shape)
 
+        print(type(y_train))
+        print(type(df))
+        cc = pd.DataFrame(y_train)
+        print(type(cc))
         if not save_figure:
-            balance(pd.DataFrame(y_train), True)
+            balance(cc, True)
         else:
-            balance(pd.DataFrame(y_train), True, img_folder /
+            balance(cc, True, img_folder /
                     "class_balance_bar_post.png", img_folder / "class_balance_pie_post.png")
 
     # Split data into training and validation set

@@ -20,12 +20,15 @@ def balance(df, smote, save_path_bar=None, save_path_pie=None):
           "\nPercentage of 0: " + str(zero_percentage) + " %\nPercentage of 1: " +
           str(round((100 - zero_percentage), 2)) + " %")
 
-    plt.figure(figsize=(6,4))
-    plt.rcParams.update({'font.size': 10})
+    if smote:
+        plt.figure(figsize=(12,8))
+    else:
+        plt.figure(figsize=(6,4))
+    plt.locator_params(axis="y", nbins=7)
     plt.bar(x=["No Bankrupt", "Bankrupt"], height=[
             result[0], result[1]], color=["royalblue", "indianred"])
     plt.ylabel("Count")
-    if smote == True:
+    if smote:
         plt.title("No. of No Bankrupt rows vs number of Bankrupt rows / Balanced")
     else:
         plt.title("No. of No Bankrupt rows vs number of Bankrupt rows / Original")
@@ -36,11 +39,13 @@ def balance(df, smote, save_path_bar=None, save_path_pie=None):
         plt.savefig(save_path_bar)
         plt.close()
 
-    plt.figure(figsize=(6,4))
-    plt.rcParams.update({'font.size': 10})
+    if smote:
+        plt.figure(figsize=(12,8))
+    else:
+        plt.figure(figsize=(6,4))
     plt.pie([result[0], result[1]], labels=["No Bankrupt", "Bankrupt"], explode=(0.1, 0), autopct='%1.2f%%',
             colors=["thistle", "paleturquoise"], radius=1)
-    if smote == True:
+    if smote:
         plt.title("No. of No Bankrupt rows vs number of Bankrupt rows / Balanced")
     else:
         plt.title("No. of No Bankrupt rows vs number of Bankrupt rows / Original")
