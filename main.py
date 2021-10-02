@@ -80,17 +80,13 @@ if __name__ == "__main__":
         sm = SMOTE()
         x_train, y_train = sm.fit_resample(x_train, y_train)
 
-        print('Data shape:', x_train.shape)
-        print('Labels shape:', y_train.shape)
+        print('Train data shape after balance:', x_train.shape)
+        print('Train labels shape after balance:', y_train.shape)
 
-        print(type(y_train))
-        print(type(df))
-        cc = pd.DataFrame(y_train)
-        print(type(cc))
         if not save_figure:
-            balance(cc, True)
+            balance(pd.DataFrame(y_train), True)
         else:
-            balance(cc, True, img_folder /
+            balance(pd.DataFrame(y_train), True, img_folder /
                     "class_balance_bar_post.png", img_folder / "class_balance_pie_post.png")
 
     # Split data into training and validation set
@@ -111,9 +107,9 @@ if __name__ == "__main__":
         model = get_model()
 
         # Train the network
-        print("\nTrain the network")
         history = None
         if train_model:
+            print("\nTrain the network")
             history = model.fit(x_train, y_train, epochs=200,
                                 validation_data=(x_valid, y_valid))
 
@@ -137,17 +133,17 @@ if __name__ == "__main__":
 
     # Evaluate the model: Check how well the dataset perform on the test set
     if evaluate_model:
-        print("\nModel Performance / Original Dataset")
+        print("\nModel Performance")
         model.evaluate(x_test, y_test)
 
     # Confusion Matrix: Compute the label prediction using the test set and plot the confusion matrix.
     if conf_matr:
         if not save_figure:
             plot_conf_matr(model, x_test, y_test,
-                           'Confusion Matrix / Original Dataset')
+                           'Confusion Matrix')
         else:
             plot_conf_matr(model, x_test, y_test,
-                           'Confusion Matrix / Original Dataset', img_folder / "conf_matr.png")
+                           'Confusion Matrix', img_folder / "conf_matr.png")
 
     # Save the model
     if save_model:
