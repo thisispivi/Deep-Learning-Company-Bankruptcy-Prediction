@@ -105,7 +105,6 @@ if __name__ == "__main__":
     print('Validation labels shape:', y_valid.shape)
     print('Test data shape:', x_test.shape)
     print('Test labels shape:', y_test.shape)
-    #input("PRESS ENTER TO CONTINUE")
 
     if not load_model:
         print("\nCreate new model")
