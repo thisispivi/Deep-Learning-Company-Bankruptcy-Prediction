@@ -50,7 +50,7 @@ if __name__ == "__main__":
     if not save_figure:
         plot_outliers(df, False)
     else:
-        plot_outliers(df, False, img_folder / "outliers.png")
+        plot_outliers(df, False, img_folder / "boxplot.png")
 
     # Fix outliers
     if substitute:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         if not save_figure:
             plot_outliers(df, False)
         else:
-            plot_outliers(df, False, img_folder / "outliers.png")
+            plot_outliers(df, False, img_folder / "boxplot_after.png")
 
     # Normalize values
     print("\nNormalize Dataset\n")

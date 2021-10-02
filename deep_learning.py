@@ -14,15 +14,20 @@ def get_model():
     :return: The keras model
     """
     new_model = keras.models.Sequential()
-    new_model.add(keras.layers.Dense(128, activation='relu', input_shape=(95,)))
-    new_model.add(keras.layers.Dense(64, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+    new_model.add(keras.layers.Dense(
+        128, activation='relu', input_shape=(95,)))
+    new_model.add(keras.layers.Dense(
+        64, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
     new_model.add(keras.layers.Dropout(0.5))
-    new_model.add(keras.layers.Dense(32, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+    new_model.add(keras.layers.Dense(
+        32, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
     new_model.add(keras.layers.Dropout(0.5))
-    new_model.add(keras.layers.Dense(16, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
+    new_model.add(keras.layers.Dense(
+        16, kernel_regularizer=keras.regularizers.l2(0.001), activation='relu'))
     new_model.add(keras.layers.Dense(1, activation='sigmoid'))
     optimizer = keras.optimizers.RMSprop(learning_rate=0.001)
-    new_model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    new_model.compile(optimizer=optimizer,
+                      loss='binary_crossentropy', metrics=['accuracy'])
 
     return new_model
 

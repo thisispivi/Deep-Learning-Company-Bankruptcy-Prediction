@@ -23,7 +23,7 @@ conf_matr = True
 plot_model = True
 save_model = True
 load_model = False
-save_figure = False
+save_figure = True
 substitute = False
 
 data_folder = Path(__file__).parent.resolve() / Path("data")
