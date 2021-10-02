@@ -20,7 +20,7 @@ This readme will explain the dataset structure, how the project works and the be
   * [Data Normalization](#data-normalization)
   * [Split into training and test set](#split-into-training-and-test-set)
   * [Balance Dataset](#balance-dataset)
-  * [Split data into training, validation and test set](#split-data-into-training--validation-and-test-set)
+  * [Split data into training validation and test set](#split-data-into-training-validation-and-test-set)
   * [Network creation](#network-creation)
     + [Network Evaluate](#network-evaluate)
     + [Save Model](#save-model)
@@ -228,7 +228,7 @@ The shape of the training set depends on the number of the class 0, so it will b
 After the balance the training set will look like this:  
 ![class_balance_pie_post](img/class_balance_pie_post.png)
 
-## Split data into training, validation and test set
+## Split data into training validation and test set
 
 After we split the training set into **train** and **validation** sets. So we will have these dataframes:
 * ```x_train```: The training set data
