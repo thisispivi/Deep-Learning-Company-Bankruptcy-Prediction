@@ -230,7 +230,7 @@ After the balance the training set will look like this:
 
 ## Split data into training validation and test set
 
-After we split the training set into **train** and **validation** sets. So we will have these dataframes:
+After we split the training set into **train** and **validation** sets. Validation set will be 20% of the training set. So we will have these dataframes:
 * ```x_train```: The training set data
 * ```y_train```: The training set label
 * ```x_valid```: The validation set data
